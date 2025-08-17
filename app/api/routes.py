@@ -19,7 +19,6 @@ def search_entities():
         all_results = []
         sources_found = []
 
-        # scraper 1
         offshore_scraper = OffshoreScraper()
         offshore_results = offshore_scraper.search_entity(entity_name)
         if 'error' in offshore_results:
@@ -28,7 +27,6 @@ def search_entities():
             all_results.extend(offshore_results['data'])
             sources_found.append("Offshore Leaks")
 
-        # scraper 2
         world_scraper_output = WorldBankScraper(entity_name)
         if 'error' in world_scraper_output:
             print(f'World Bank Scraper Error : ', world_scraper_output['error'])

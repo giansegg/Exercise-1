@@ -58,23 +58,20 @@ def WorldBankScraper(entity_name):
             
             print("Esperando carga...")
             page.wait_for_load_state('domcontentloaded')
-            time.sleep(10)  # Tiempo fijo, sin timeouts complicados
+            time.sleep(10) 
             
-            # Método 1: Extracción manual simple
             print("Extrayendo manualmente...")
             data = []
             
-            # Buscar filas de tabla
             rows = page.query_selector_all('tbody tr, table tr')
             print(f"Filas encontradas: {len(rows)}")
             
             for i, row in enumerate(rows):
                 cells = row.query_selector_all('td')
-                if len(cells) >= 6:  # Debe tener al menos 6 columnas
+                if len(cells) >= 6:  
                     
                     texts = [cell.inner_text().strip() for cell in cells]
                     
-                    # Verificar que no sea fila vacía o header
                     if texts[0] and len(texts[0]) > 3 and not texts[0].lower().startswith('firm'):
                         
                         record = {
@@ -89,11 +86,9 @@ def WorldBankScraper(entity_name):
                         
                         data.append(record)
                         
-                        # Debug: mostrar primeros registros
                         if i < 5:
                             print(f"  {i+1}. {record['Firm Name']}")
             
-            # Método 2: Si no hay datos, usar pandas como respaldo
             if not data:
                 print("Método manual falló, intentando pandas...")
                 try:
@@ -102,21 +97,16 @@ def WorldBankScraper(entity_name):
                     
                     for table in tables:
                         if len(table.columns) >= 6 and len(table) > 1:
-                            # Intentar convertir a formato estándar
                             df = table.copy()
                             
-                            # Si tiene multi-index, aplanar
                             if df.columns.nlevels > 1:
                                 df.columns = [col[-1] if isinstance(col, tuple) else col for col in df.columns]
                             
-                            # Asignar nombres estándar
                             expected_cols = ['Firm Name', 'Address', 'Country', 'From Date', 'To Date', 'Grounds']
                             df.columns = expected_cols[:len(df.columns)]
                             
-                            # Convertir a diccionarios
                             records = df.to_dict('records')
                             
-                            # Filtrar registros válidos
                             for record in records:
                                 firm_name = str(record.get('Firm Name', '')).strip()
                                 if firm_name and firm_name != 'nan' and len(firm_name) > 3:
@@ -132,7 +122,6 @@ def WorldBankScraper(entity_name):
             
             print(f"Total extraído: {len(data)} registros")
             
-            # Filtrar por entity_name
             if entity_name and data:
                 filtered = []
                 for record in data:

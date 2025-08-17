@@ -128,9 +128,7 @@ class OffshoreScraper(BaseScraper):
                 link_tag = row.find('a', href=True)
                 if link_tag:
                     entity_name = link_tag.get_text(strip=True)
-                    # print(f"urlbase: {self.base_url}")
                     details_url = f"{self.base_url}{link_tag['href']}"
-                    # print(f"details_url: {details_url}")
 
                     results_with_links.append({
                         'name': entity_name,
