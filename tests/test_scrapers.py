@@ -4,19 +4,20 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.scrapers.offshore_scraper import OffshoreScrapper
+from app.scrapers.offshore_scraper import OffshoreScraper
+from app.scrapers.world_scraper import WorldBankScraper
 
 def run_test():
-    
-    scraper = OffshoreScrapper()
-    entity_name = "Miranda & Amado | Lima, Peru"  
+    print("Starting test for OffshoreScraper...")
+    scraper = OffshoreScraper()
+    entity_name = "Orange"  
     
     try:
         results = scraper.search_entity(entity_name)
         
         if results:
             print("se encontraron los siguientes resultados :")
-            for item in results:
+            for item in results['data']:
                 print(f"  - Nombre: {item.get('Entity')}")
                 print(f"    - Jurisdicción: {item.get('Jurisdiction')}")
                 print(f"    - Vinculado a: {item.get('Linked To')}")
@@ -32,5 +33,12 @@ def run_test():
     except Exception as e:
         print(f" La prueba fallo debido a un error: {e}")
 
+def test_world_bank_scraper():
+    entity_name = "Orange "
+    scraper = WorldBankScraper(entity_name)
+    print(scraper)
+
+
 if __name__ == "__main__":
     run_test()
+    # test_world_bank_scraper()

@@ -1,6 +1,6 @@
 from flask import Flask
 from app.api.routes import api_bp
-from utils.rate_lim import limiter
+from app.utils.rate_lim import limiter
 
 def create_app():
     app = Flask(__name__)

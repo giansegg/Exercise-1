@@ -15,5 +15,10 @@ Web Scraping: Entidades en alto riesgo de fuentes confiables
 # 3.- Instalar las dependencias necesarias
     pip install -r requirements.txt
 
-# 4.- Ejecutar
+# 4 instalar los navegadores 
+    playwright install 
+
+
+
+# 5.- Ejecutar
     python main.py

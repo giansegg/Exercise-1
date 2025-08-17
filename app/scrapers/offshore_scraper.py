@@ -1,29 +1,31 @@
 from .base_scraper import BaseScraper
 from bs4 import Tag
 
-class OffshoreScrapper(BaseScraper):
+class OffshoreScraper(BaseScraper):
     def __init__(self):
         super().__init__("https://offshoreleaks.icij.org")
     
 
-    def extract_entity_info(self, soup):
-        entity_info = []
-        results = soup.find_all('div', class_='search__results__content')
-        for result in results:
-            link_tag = result.fin('a')
-            if link_tag and 'href' in link_tag.attrs:
-                entity_name = link_tag.text.strip()
-                entity_url = link_tag['href']
-                if not entity_url.startswith('http'):
-                    entity_url = f"{self.base_url}{entity_url}"
-                entity_info.append({
-                    'name': entity_name,
-                    'url': entity_url
-                })
+    # def extract_entity_info(self, soup):
+    #     entity_info = []
+    #     results = soup.find_all('div', class_='search__results__content')
+    #     for result in results:
+    #         link_tag = result.find('a')
+    #         if link_tag and 'href' in link_tag.attrs:
+    #             entity_name = link_tag.text.strip()
+    #             entity_url = link_tag['href']
+    #             if not entity_url.startswith('http'):
+    #                 entity_url = f"{self.base_url}{entity_url}"
+    #             entity_info.append({
+    #                 'name': entity_name,
+    #                 'url': entity_url
+    #             })
             
-        return entity_info
+    #     return entity_info
     
     def scrape_details_page(self, details_url):
+        print(f"DEBUG: Scrapeando página de detalles: {details_url}")
+
         html_content = self.get_pageContent(details_url)
         if not html_content:
             return {}
@@ -89,36 +91,46 @@ class OffshoreScrapper(BaseScraper):
             if status_tag:
                 status_value = status_tag.find_next_sibling('div', class_='metadata__dates__status-value')
                 details['Status'] = status_value.get_text(strip=True) if status_value else None
+        print(f"DEBUG: Detalles extraídos: {details}")
+
         
         return details
 
         
         
     def search_entity(self, entity_name):
+        print(f"DEBUG: Iniciando búsqueda para la entidad: {entity_name}")
+
         search_url = f"{self.base_url}/search?q={entity_name}"
         html_content = self.get_pageContent(search_url)
         if not html_content:
-            return []
+            return {"hits": 0, "data": []}
         soup = self.parse_html(html_content)
         if not soup:
-            return []
+            return {"hits": 0, "data": []}
 
         result_div = soup.find('table', class_='search__results__table')
         if not result_div:
-            return []
-        
+            return {"hits": 0, "data": []}
+
         results_with_links = []
         rows = result_div.find('tbody').find_all('tr')
+        print(f"DEBUG: Se encontraron {len(rows)} filas de resultados.")
 
-        for row in rows:
+
+        rows_top_5 = rows[:5]
+        print(f"DEBUG: Procesando las primeras {len(rows_top_5)} filas.")
+
+
+        for row in rows_top_5:
             td_tag = row.find('td')
             if td_tag:
                 link_tag = row.find('a', href=True)
                 if link_tag:
                     entity_name = link_tag.get_text(strip=True)
-                    print(f"urlbase: {self.base_url}")
+                    # print(f"urlbase: {self.base_url}")
                     details_url = f"{self.base_url}{link_tag['href']}"
-                    print(f"details_url: {details_url}")
+                    # print(f"details_url: {details_url}")
 
                     results_with_links.append({
                         'name': entity_name,
@@ -134,4 +146,7 @@ class OffshoreScrapper(BaseScraper):
             })
             self.sleep(1) 
 
-        return final_results
+        return {
+            "hits": len(final_results),
+            "data": final_results
+        }
