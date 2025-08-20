@@ -46,7 +46,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:5000/api/search?entity_name=Peter",
+					"raw": "http://127.0.0.1:5000/api/search?entity_name=Pandora",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -62,7 +62,7 @@
 					"query": [
 						{
 							"key": "entity_name",
-							"value": "Peter"
+							"value": "Pandora"
 						}
 					]
 				}
@@ -73,7 +73,28 @@
 			"name": "New Request",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/search?entity_name=Orange",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "entity_name",
+							"value": "Orange"
+						}
+					]
+				}
 			},
 			"response": []
 		},
@@ -81,7 +102,33 @@
 			"name": "New Request",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/search/source?entity_name=Orange&source=offshore",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"search",
+						"source"
+					],
+					"query": [
+						{
+							"key": "entity_name",
+							"value": "Orange"
+						},
+						{
+							"key": "source",
+							"value": "offshore"
+						}
+					]
+				}
 			},
 			"response": []
 		}
