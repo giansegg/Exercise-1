@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "0363827d-4d79-4d56-ada4-fc3254a8768e",
+		"name": "Coleccion Ejercicio1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40707133"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/search/source?entity_name=Orange&source=world",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"search",
+						"source"
+					],
+					"query": [
+						{
+							"key": "entity_name",
+							"value": "Orange"
+						},
+						{
+							"key": "source",
+							"value": "world"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/api/search?entity_name=Peter",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "entity_name",
+							"value": "Peter"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
