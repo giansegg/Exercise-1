@@ -47,3 +47,47 @@ def search_entities():
 
     except Exception as e:
         return error_response(500, f"Ocurrió un error interno: {str(e)}")
+
+@api_bp.route('/search/source', methods=['GET'])
+def search_entities_by_source():
+    entity_name = request.args.get('entity_name')
+    source = request.args.get('source', '').lower()  # 'offshore', 'world', o vacío
+
+    is_valid, error_msg = is_valid_entity_name(entity_name)
+    if not is_valid:
+        return error_response(400, error_msg)
+
+    try:
+        all_results = []
+        sources_found = []
+
+        if source in ('offshore', ''):
+            offshore_scraper = OffshoreScraper()
+            offshore_results = offshore_scraper.search_entity(entity_name)
+            if 'error' in offshore_results:
+                print(f'Offshore Leaks Scraper Error : ', offshore_results['error'])
+            elif offshore_results.get('data'):
+                all_results.extend(offshore_results['data'])
+                sources_found.append("Offshore Leaks")
+
+        if source in ('world', ''):
+            world_scraper_output = WorldBankScraper(entity_name)
+            if 'error' in world_scraper_output:
+                print(f'World Bank Scraper Error : ', world_scraper_output['error'])
+            elif world_scraper_output.get('data'):
+                all_results.extend(world_scraper_output['data'])
+                sources_found.append("The World Bank")
+
+        hits = len(all_results)
+        if hits == 0:
+            return error_response(200, f"No se encontraron resultados para: {entity_name}")
+
+        response_data = {
+            "hits": hits,
+            "sources_found": sources_found,
+            "results": all_results
+        }
+        return success_response(200, "Búsqueda completada exitosamente.", response_data)
+
+    except Exception as e:
+        return error_response(500, f"Ocurrió un error interno: {str(e)}")

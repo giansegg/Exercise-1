@@ -18,7 +18,5 @@ Web Scraping: Entidades en alto riesgo de fuentes confiables
 # 4 instalar los navegadores 
     playwright install 
 
-
-
 # 5.- Ejecutar
-    python main.py
+    python -m app.main  
